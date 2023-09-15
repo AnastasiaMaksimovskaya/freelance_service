@@ -7,7 +7,7 @@ import com.free.freelance_service.enums.ThemeEnum;
 import javax.persistence.*;
 
 @Entity
-@Table (name = "order")
+@Table (name = "orders")
 @AttributeOverride(name = "id", column = @Column(name = "order_id"))
 public class Order extends BaseEntity {
 
