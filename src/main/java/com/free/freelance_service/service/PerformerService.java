@@ -19,8 +19,6 @@ public class PerformerService {
         String userId = IdGeneratorUtil.generate();
         Performer performer = new Performer();
         performer.setId(userId);
-        performer.setLogin(dto.getLogin());
-        performer.setPassword(dto.getPassword());
         performer.setCreated(new Date());
         performer.setUpdated(new Date());
         performer.setEmail(dto.getLogin());

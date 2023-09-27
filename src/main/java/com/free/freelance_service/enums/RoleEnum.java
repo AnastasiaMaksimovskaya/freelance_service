@@ -1,7 +1,20 @@
 package com.free.freelance_service.enums;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 public enum RoleEnum {
     PERFORMER,
     CLIENT,
-    ADMIN
+    ADMIN;
+
+    public Set<SimpleGrantedAuthority> getAuthorities() {
+        Set<SimpleGrantedAuthority> authorities = new HashSet<SimpleGrantedAuthority>();
+        authorities.add(new SimpleGrantedAuthority(name()));
+        return authorities;
+    }
 }

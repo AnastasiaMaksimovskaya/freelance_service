@@ -3,7 +3,7 @@ package com.free.freelance_service.dto;
 public class Message {
     protected String status;
     protected String message;
-    protected String code;
+    protected int code;
 
     public String getStatus() {
         return status;
@@ -21,11 +21,11 @@ public class Message {
         this.message = message;
     }
 
-    public String getCode() {
+    public int getCode() {
         return code;
     }
 
-    public void setCode(String code) {
+    public void setCode(int code) {
         this.code = code;
     }
 }

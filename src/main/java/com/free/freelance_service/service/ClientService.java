@@ -23,8 +23,6 @@ public class ClientService {
         String userId = IdGeneratorUtil.generate();
         Client client = new Client();
         client.setId(userId);
-        client.setLogin(dto.getLogin());
-        client.setPassword(dto.getPassword());
         client.setCreated(new Date());
         client.setUpdated(new Date());
         client.setEmail(dto.getLogin());

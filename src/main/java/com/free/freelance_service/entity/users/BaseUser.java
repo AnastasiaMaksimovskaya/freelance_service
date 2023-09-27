@@ -1,9 +1,7 @@
 package com.free.freelance_service.entity.users;
 
 import javax.persistence.Column;
-import javax.persistence.JoinColumn;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.OneToOne;
 
 @MappedSuperclass
 public abstract class BaseUser extends BaseEntity {
@@ -20,8 +18,6 @@ public abstract class BaseUser extends BaseEntity {
     private String email;
     @Column(name = "phone")
     private String phoneNumber;
-    private String login;
-    private String password;
 
 
     public String getFirstName() {
@@ -70,21 +66,5 @@ public abstract class BaseUser extends BaseEntity {
 
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 }
