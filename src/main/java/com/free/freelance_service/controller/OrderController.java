@@ -4,14 +4,11 @@ package com.free.freelance_service.controller;
 import com.free.freelance_service.dto.MessageResultDto;
 import com.free.freelance_service.dto.OrderDto;
 import com.free.freelance_service.entity.Order;
+import com.free.freelance_service.request.SearchRequest;
 import com.free.freelance_service.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/order")
@@ -28,10 +25,11 @@ public class OrderController {
         return messageResultDto;
     }
 
-    @RequestMapping(value = "/getOrders", method = RequestMethod.GET)
-    public MessageResultDto<Order> getOrders() {
+    @RequestMapping(value = "/getOrders", method = RequestMethod.POST)
+    public MessageResultDto<Order> getOrders(@RequestBody SearchRequest searchRequest) {
         MessageResultDto<Order> messageResultDto = new MessageResultDto<>();
-        messageResultDto.setObjects(orderService.getAll());
+        messageResultDto.setTotal(orderService.getTotal());
+        messageResultDto.setObjects(orderService.getBySearch(searchRequest));
         return messageResultDto;
     }
 }

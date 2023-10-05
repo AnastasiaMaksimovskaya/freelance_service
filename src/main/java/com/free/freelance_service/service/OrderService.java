@@ -6,8 +6,10 @@ import com.free.freelance_service.entity.users.Performer;
 import com.free.freelance_service.enums.CurrencyEnum;
 import com.free.freelance_service.enums.ThemeEnum;
 import com.free.freelance_service.repo.OrderRepo;
+import com.free.freelance_service.request.SearchRequest;
 import com.free.freelance_service.util.IdGeneratorUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -30,5 +32,15 @@ public class OrderService {
 
     public List<Order> getAll() {
         return orderRepo.findAll();
+    }
+
+    public List<Order> getBySearch(SearchRequest searchRequest) {
+        int pageSize = searchRequest.getPageSize();
+        int page = searchRequest.getPage();
+        return orderRepo.findAllBySearch(pageSize, (page - 1) * pageSize );
+    }
+
+    public long getTotal() {
+        return orderRepo.count(Example.of(new Order()));
     }
 }

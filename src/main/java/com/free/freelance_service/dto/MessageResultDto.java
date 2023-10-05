@@ -5,6 +5,7 @@ import java.util.List;
 public class MessageResultDto<T> extends Message {
     T object;
     List<T> objects;
+    long total;
 
     public MessageResultDto() {
     }
@@ -23,5 +24,13 @@ public class MessageResultDto<T> extends Message {
 
     public void setObjects(List<T> objects) {
         this.objects = objects;
+    }
+
+    public long getTotal() {
+        return total;
+    }
+
+    public void setTotal(long total) {
+        this.total = total;
     }
 }
