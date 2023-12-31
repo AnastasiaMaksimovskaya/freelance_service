@@ -40,7 +40,7 @@ public class AuthController {
             String password = authDto.getPassword();
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login, password));
             UserCredentials user = userRepo.findFirstByLogin(login);
-            String token = jwtTokenProvider.createToken(login, user.getRole().toString());
+            String token = jwtTokenProvider.createToken(login, user.getRole().toString(), user.getUserId());
             Map<String, String> response = new HashMap<>();
             response.put("login", login);
             response.put("token", token);
@@ -60,3 +60,4 @@ public class AuthController {
         securityContextLogoutHandler.logout(request, response, null);
     }
 }
+    

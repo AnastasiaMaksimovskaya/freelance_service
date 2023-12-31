@@ -1,7 +1,9 @@
 package com.free.freelance_service.controller;
 
 import com.free.freelance_service.dto.Message;
+import com.free.freelance_service.dto.MessageResultDto;
 import com.free.freelance_service.dto.UserDto;
+import com.free.freelance_service.entity.users.Performer;
 import com.free.freelance_service.enums.StatusEnum;
 import com.free.freelance_service.service.PerformerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,5 +23,12 @@ public class PerformerController {
         performerService.regUser(user);
         message.setStatus(StatusEnum.ok.toString());
         return message;
+    }
+    @RequestMapping(value = "/getInfo", method = RequestMethod.GET)
+    public MessageResultDto<Performer> getInfo (@RequestParam String id) {
+        MessageResultDto<Performer> messageInfo = new MessageResultDto<>();
+        Performer performerInfo = performerService.performerInfo(id);
+        messageInfo.setObject(performerInfo);
+        return messageInfo;
     }
 }
