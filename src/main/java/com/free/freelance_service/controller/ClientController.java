@@ -6,6 +6,7 @@ import com.free.freelance_service.dto.UserDto;
 import com.free.freelance_service.entity.users.Client;
 import com.free.freelance_service.enums.StatusEnum;
 import com.free.freelance_service.service.ClientService;
+import com.free.freelance_service.service.ExchangeCurrencyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 public class ClientController {
     @Autowired
     private ClientService clientService;
+    @Autowired
+    private ExchangeCurrencyService exchangeCurrencyService;
 
     @RequestMapping(value = "/reg", method = RequestMethod.POST)
     public Message registration (@RequestBody UserDto user) {
@@ -30,5 +33,10 @@ public class ClientController {
         Client clientInfo = clientService.clientInfo(id);
         messageInfo.setObject(clientInfo);
         return messageInfo;
+    }
+
+    @RequestMapping(value = "/getCurrency", method = RequestMethod.GET)
+    public void getCurrency () {
+        exchangeCurrencyService.getConvertedToUSD();
     }
 }

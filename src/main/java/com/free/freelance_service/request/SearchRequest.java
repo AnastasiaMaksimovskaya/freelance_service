@@ -4,6 +4,8 @@ public class SearchRequest {
 
     private int page;
     private int pageSize;
+    private String orderBy;
+    private String sort;
 
     public SearchRequest() {
     }
@@ -22,5 +24,21 @@ public class SearchRequest {
 
     public void setPageSize(int pageSize) {
         this.pageSize = pageSize;
+    }
+
+    public String getOrderBy() {
+        return orderBy;
+    }
+
+    public void setOrderBy(String orderBy) {
+        this.orderBy = orderBy;
+    }
+
+    public String getSort() {
+        return sort;
+    }
+
+    public void setSort(String sort) {
+        this.sort = sort;
     }
 }
