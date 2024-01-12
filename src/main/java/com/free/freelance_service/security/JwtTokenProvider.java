@@ -1,14 +1,10 @@
 package com.free.freelance_service.security;
 
 import com.free.freelance_service.exeption.JwtCustomException;
+import com.free.freelance_service.repo.UserRepo;
 import io.jsonwebtoken.*;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -19,7 +15,7 @@ import java.util.Date;
 @Service
 public class JwtTokenProvider {
 
-    private final UserDetailsService userDetailsService;
+    private final UserRepo userRepo;
 
     @Value("${jwt.secretKey}")
     private String secretKey;
@@ -28,9 +24,10 @@ public class JwtTokenProvider {
     @Value("${jwt.expiration}")
     private long validateMillisec;
 
-    public JwtTokenProvider(@Qualifier("userDetailsServiceImpl") UserDetailsService userDetailsService) {
-        this.userDetailsService = userDetailsService;
+    public JwtTokenProvider(UserRepo userRepo) {
+        this.userRepo = userRepo;
     }
+
 
     @PostConstruct
     protected void init() {
@@ -55,9 +52,8 @@ public class JwtTokenProvider {
         }
     }
 
-    public Authentication getAuthentication(String token) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(getUserName(token));
-        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+    public CustomAuth getAuthentication(String token) {
+        return new CustomAuth(userRepo.findFirstByLogin(getUserName(token)));
     }
 
     public String getUserName(String token) {
