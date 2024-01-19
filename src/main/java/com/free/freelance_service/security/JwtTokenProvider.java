@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
 import java.util.Date;
@@ -19,10 +20,8 @@ public class JwtTokenProvider {
 
     @Value("${jwt.secretKey}")
     private String secretKey;
-    @Value("${jwt.header}")
-    private String header;
     @Value("${jwt.expiration}")
-    private long validateMillisec;
+    private int validateMillisec;
 
     public JwtTokenProvider(UserRepo userRepo) {
         this.userRepo = userRepo;
@@ -48,7 +47,7 @@ public class JwtTokenProvider {
             Jws<Claims> claimsJws = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
             return claimsJws.getBody().getExpiration().after(new Date());
         } catch (JwtException | IllegalArgumentException e) {
-            throw new JwtCustomException("token is invalid or expired", HttpStatus.FORBIDDEN);
+            throw new JwtCustomException("token is invalid or expired", HttpStatus.UNAUTHORIZED);
         }
     }
 
@@ -61,6 +60,23 @@ public class JwtTokenProvider {
     }
 
     public String resolveToken(HttpServletRequest request) {
-        return request.getHeader(header);
+        Cookie jwt = getCookieByKey(request, "jwt");
+        if (jwt != null) {
+            return jwt.getValue();
+        }
+        return null;
+    }
+
+    public Cookie getCookieByKey (HttpServletRequest request, String key) {
+        Cookie[] cookies = request.getCookies();
+
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(key)) {
+                    return  cookie;
+                }
+            }
+        }
+        return null;
     }
 }

@@ -20,7 +20,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
-public class AuthController {
+public class AuthController extends BaseController {
 
     private final AuthenticationManager authenticationManager;
     private final UserRepo userRepo;
@@ -33,23 +33,22 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public MessageResultDto<?> authenticate(@RequestBody AuthDto authDto) {
-        MessageResultDto messageResultDto = new MessageResultDto<>();
+    public MessageResultDto<Map<String, String>> authenticate(@RequestBody AuthDto authDto, HttpServletResponse httpServletResponse) {
+        MessageResultDto<Map<String, String>> messageResultDto = new MessageResultDto<>();
         try {
             String login = authDto.getLogin();
             String password = authDto.getPassword();
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login, password));
             UserCredentials user = userRepo.findFirstByLogin(login);
             String token = jwtTokenProvider.createToken(login, user.getRole().toString(), user.getUserId());
+            setJwtCookie(httpServletResponse, token);
             Map<String, String> response = new HashMap<>();
             response.put("login", login);
             response.put("token", token);
             messageResultDto.setObject(response);
-
         } catch (AuthenticationException e) {
-            e.printStackTrace();
-            messageResultDto.setStatus(HttpStatus.FORBIDDEN.getReasonPhrase());
-            messageResultDto.setCode(HttpStatus.FORBIDDEN.value());
+            messageResultDto.setStatus(HttpStatus.UNAUTHORIZED.getReasonPhrase());
+            messageResultDto.setCode(HttpStatus.UNAUTHORIZED.value());
         }
         return messageResultDto;
     }

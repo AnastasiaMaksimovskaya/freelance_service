@@ -21,7 +21,9 @@ public class UserService {
     private PerformerRepo performerRepo;
 
     public <T extends BaseUser> T returnUser (T baseUser, UserDto dto, String userId) {
-        baseUser.setId(userId);
+        String id = IdGeneratorUtil.generate();
+        baseUser.setId(id);
+        baseUser.setUserId(userId);
         baseUser.setCreated(new Date());
         baseUser.setUpdated(new Date());
         baseUser.setEmail(dto.getLogin());

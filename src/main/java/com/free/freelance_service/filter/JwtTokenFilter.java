@@ -11,6 +11,7 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -36,6 +37,12 @@ public class JwtTokenFilter extends GenericFilterBean {
             }
         } catch (JwtCustomException e) {
             SecurityContextHolder.clearContext();
+            Cookie deleted = new Cookie("jwt", null);
+            deleted.setMaxAge(0);
+            deleted.setPath("/");
+            deleted.setSecure(true);
+            deleted.setHttpOnly(true);
+            ((HttpServletResponse) servletResponse).addCookie(deleted);
             ((HttpServletResponse) servletResponse).sendError(e.getHttpStatus().value());
         }
         filterChain.doFilter(servletRequest, servletResponse);
