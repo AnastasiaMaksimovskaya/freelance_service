@@ -2,7 +2,9 @@ package com.free.freelance_service.enums;
 
 public enum ExceptionEnum {
     globalException("", "", ""),
-    authException("", "", "");
+    authException("", "", ""),
+    notFound("","", "")
+    ;
     private String en;
     private String ru;
     private String ua;

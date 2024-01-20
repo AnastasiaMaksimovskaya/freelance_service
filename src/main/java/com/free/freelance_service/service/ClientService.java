@@ -38,7 +38,7 @@ public class ClientService {
         userRepo.save(userCredentials);
         String token = jwtTokenProvider.createToken(dto.getLogin(), RoleEnum.CLIENT.toString(), userId);
         Client client = new Client();
-        client = userService.returnUser(client, dto, userId);
+        client = userService.returnNewUser(client, dto, userId);
         clientRepo.save(client);
         return token;
     }

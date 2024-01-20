@@ -33,7 +33,7 @@ public class PerformerService {
         userCredentials.setRole(RoleEnum.PERFORMER);
         String token = jwtTokenProvider.createToken(dto.getLogin(), RoleEnum.CLIENT.toString(), userId);
         Performer performer = new Performer();
-        performer = userService.returnUser(performer, dto, userId);
+        performer = userService.returnNewUser(performer, dto, userId);
         performerRepo.save(performer);
         return token;
     }
