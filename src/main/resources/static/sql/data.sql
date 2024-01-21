@@ -47,3 +47,10 @@ create table orders
     theme     varchar   not null
 );
 
+create table exchange
+(
+    currency varchar not null
+        constraint exchange_pk
+            primary key,
+    units  double precision not null
+);

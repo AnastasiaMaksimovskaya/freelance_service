@@ -3,6 +3,7 @@ package com.free.freelance_service.entity;
 import com.free.freelance_service.entity.users.BaseEntity;
 import com.free.freelance_service.enums.CurrencyEnum;
 import com.free.freelance_service.enums.ThemeEnum;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 
@@ -19,6 +20,9 @@ public class Order extends BaseEntity {
     private Long price;
     @Enumerated(EnumType.STRING)
     private CurrencyEnum currency;
+
+    @Formula(value = "price / (select exchange.units from exchange where exchange.currency = currency)")
+    private Double units;
 
     public String getClientId() {
         return clientId;
@@ -58,5 +62,13 @@ public class Order extends BaseEntity {
 
     public void setCurrency(CurrencyEnum currency) {
         this.currency = currency;
+    }
+
+    public Double getUnits() {
+        return units;
+    }
+
+    public void setUnits(Double units) {
+        this.units = units;
     }
 }

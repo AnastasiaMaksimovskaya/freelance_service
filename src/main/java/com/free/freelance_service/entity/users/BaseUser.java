@@ -2,6 +2,7 @@ package com.free.freelance_service.entity.users;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
 
 @MappedSuperclass
 public abstract class BaseUser extends BaseEntity {
@@ -18,6 +19,8 @@ public abstract class BaseUser extends BaseEntity {
     private String email;
     @Column(name = "phone")
     private String phoneNumber;
+    @Transient
+    private String role;
 
 
     public String getFirstName() {
@@ -66,5 +69,13 @@ public abstract class BaseUser extends BaseEntity {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

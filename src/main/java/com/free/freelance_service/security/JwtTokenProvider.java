@@ -1,17 +1,14 @@
 package com.free.freelance_service.security;
 
 import com.free.freelance_service.exeption.JwtCustomException;
+import com.free.freelance_service.repo.UserRepo;
 import io.jsonwebtoken.*;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
 import java.util.Date;
@@ -19,18 +16,17 @@ import java.util.Date;
 @Service
 public class JwtTokenProvider {
 
-    private final UserDetailsService userDetailsService;
+    private final UserRepo userRepo;
 
     @Value("${jwt.secretKey}")
     private String secretKey;
-    @Value("${jwt.header}")
-    private String header;
     @Value("${jwt.expiration}")
-    private long validateMillisec;
+    private int validateMillisec;
 
-    public JwtTokenProvider(@Qualifier("userDetailsServiceImpl") UserDetailsService userDetailsService) {
-        this.userDetailsService = userDetailsService;
+    public JwtTokenProvider(UserRepo userRepo) {
+        this.userRepo = userRepo;
     }
+
 
     @PostConstruct
     protected void init() {
@@ -51,13 +47,12 @@ public class JwtTokenProvider {
             Jws<Claims> claimsJws = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
             return claimsJws.getBody().getExpiration().after(new Date());
         } catch (JwtException | IllegalArgumentException e) {
-            throw new JwtCustomException("token is invalid or expired", HttpStatus.FORBIDDEN);
+            throw new JwtCustomException("token is invalid or expired", HttpStatus.UNAUTHORIZED);
         }
     }
 
-    public Authentication getAuthentication(String token) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(getUserName(token));
-        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+    public CustomAuth getAuthentication(String token) {
+        return new CustomAuth(userRepo.findFirstByLogin(getUserName(token)));
     }
 
     public String getUserName(String token) {
@@ -65,6 +60,23 @@ public class JwtTokenProvider {
     }
 
     public String resolveToken(HttpServletRequest request) {
-        return request.getHeader(header);
+        Cookie jwt = getCookieByKey(request, "jwt");
+        if (jwt != null) {
+            return jwt.getValue();
+        }
+        return null;
+    }
+
+    public Cookie getCookieByKey (HttpServletRequest request, String key) {
+        Cookie[] cookies = request.getCookies();
+
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(key)) {
+                    return  cookie;
+                }
+            }
+        }
+        return null;
     }
 }
