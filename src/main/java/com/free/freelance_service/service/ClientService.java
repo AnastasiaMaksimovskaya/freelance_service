@@ -27,21 +27,21 @@ public class ClientService {
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
     
-    @Transactional
-    public String regUser (UserDto dto) {
-        String userId = IdGeneratorUtil.generate();
-        UserCredentials userCredentials = new UserCredentials();
-        userCredentials.setUserId(userId);
-        userCredentials.setLogin(dto.getLogin());
-        userCredentials.setPassword(passwordEncoder.encode(dto.getPassword()));
-        userCredentials.setRole(RoleEnum.CLIENT);
-        userRepo.save(userCredentials);
-        String token = jwtTokenProvider.createToken(dto.getLogin(), RoleEnum.CLIENT.toString(), userId);
-        Client client = new Client();
-        client = userService.returnNewUser(client, dto, userId);
-        clientRepo.save(client);
-        return token;
-    }
+//    @Transactional
+//    public String regUser (UserDto dto) {
+//        String userId = IdGeneratorUtil.generate();
+//        UserCredentials userCredentials = new UserCredentials();
+//        userCredentials.setUserId(userId);
+//        userCredentials.setLogin(dto.getLogin());
+//        userCredentials.setPassword(passwordEncoder.encode(dto.getPassword()));
+//        userCredentials.setRole(RoleEnum.CLIENT);
+//        userRepo.save(userCredentials);
+//        String token = jwtTokenProvider.createToken(dto.getLogin(), RoleEnum.CLIENT.toString(), userId);
+//        Client client = new Client();
+//        client = userService.returnNewUser(client, , userId);
+//        clientRepo.save(client);
+//        return token;
+//    }
 
     @Transactional
     public Client clientInfo (String id) {

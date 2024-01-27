@@ -1,7 +1,9 @@
 package com.free.freelance_service.controller;
 
 import com.free.freelance_service.dto.AuthDto;
+import com.free.freelance_service.dto.Message;
 import com.free.freelance_service.dto.MessageResultDto;
+import com.free.freelance_service.dto.UserDto;
 import com.free.freelance_service.entity.users.BaseUser;
 import com.free.freelance_service.entity.users.UserCredentials;
 import com.free.freelance_service.enums.RoleEnum;
@@ -51,7 +53,6 @@ public class AuthController extends BaseController {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(login, password));
             UserCredentials user = userService.findByLogin(login);
             String token = jwtTokenProvider.createToken(login, user.getRole().toString(), user.getUserId());
-            setJwtCookie(httpServletResponse, token);
             T responseUser = null;
             switch (user.getRole()) {
                 case PERFORMER -> {
@@ -61,6 +62,7 @@ public class AuthController extends BaseController {
                     responseUser = (T) clientService.clientInfo(user.getUserId());
                 }
             }
+            setJwtCookie(httpServletResponse, token);
             responseUser.setUserId(null);
             responseUser.setRole(user.getRole().toString());
             messageResultDto.setObject(responseUser);
@@ -113,6 +115,23 @@ public class AuthController extends BaseController {
         deleted.setSecure(true);
         deleted.setHttpOnly(true);
         response.addCookie(deleted);
+    }
+
+    @RequestMapping(value = "/reg", method = RequestMethod.POST)
+    public Message registration (@RequestBody UserDto user) {
+        Message message = new Message();
+        userService.regUser(user);
+        message.setStatus(StatusEnum.ok.toString());
+        return message;
+    }
+
+    @RequestMapping(value = "/submitRegistration", method = RequestMethod.POST)
+    public Message submitRegistration (@RequestBody UserDto user, HttpServletResponse response) {
+        Message message = new Message();
+        String token = userService.submitRegistration(user);
+        setJwtCookie(response, token);
+        message.setStatus(StatusEnum.ok.toString());
+        return message;
     }
 }
     

@@ -20,14 +20,6 @@ public class PerformerController extends BaseController{
     @Autowired
     private PerformerService performerService;
 
-    @RequestMapping(value = "/reg", method = RequestMethod.POST)
-    public Message registration (@RequestBody UserDto user, HttpServletResponse response) {
-        Message message = new Message();
-        String token = performerService.regUser(user);
-        setJwtCookie(response, token);
-        message.setStatus(StatusEnum.ok.toString());
-        return message;
-    }
     @RequestMapping(value = "/getInfo", method = RequestMethod.GET)
     public MessageResultDto<Performer> getInfo () {
         MessageResultDto<Performer> messageInfo = new MessageResultDto<>();

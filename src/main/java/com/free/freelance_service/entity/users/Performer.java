@@ -1,7 +1,5 @@
 package com.free.freelance_service.entity.users;
 
-import com.free.freelance_service.entity.users.BaseUser;
-
 import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Entity;

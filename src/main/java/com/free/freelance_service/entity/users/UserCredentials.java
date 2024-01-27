@@ -19,6 +19,9 @@ public class UserCredentials {
     @Enumerated(EnumType.STRING)
     private RoleEnum role;
 
+    public UserCredentials() {
+    }
+
     public String getUserId() {
         return userId;
     }

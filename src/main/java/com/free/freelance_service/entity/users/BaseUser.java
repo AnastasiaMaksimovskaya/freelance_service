@@ -7,7 +7,6 @@ import javax.persistence.Transient;
 @MappedSuperclass
 public abstract class BaseUser extends BaseEntity {
 
-
     @Column(name = "user_id")
     private String userId;
     @Column(name = "first_name")

@@ -37,7 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers("/auth/login").permitAll()
+                .antMatchers("/auth/login", "/performer/submitRegistration", "/client/submitRegistration").permitAll()
                 .antMatchers("/performer").hasRole(RoleEnum.PERFORMER.name())
                 .antMatchers("/client").hasRole(RoleEnum.CLIENT.name())
                 .antMatchers("/auth/popup").not().authenticated().and()

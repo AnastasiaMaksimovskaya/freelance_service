@@ -54,3 +54,18 @@ create table exchange
             primary key,
     units  double precision not null
 );
+create table temp_user
+(
+    user_id          varchar   not null
+        constraint temp_user_pk
+            primary key,
+    confirmation_key varchar   not null,
+    expires_at       timestamp not null,
+    password         varchar   not null,
+    first_name       varchar   not null,
+    last_name        varchar   not null,
+    login            varchar   not null,
+    role             varchar   not null,
+    phone            integer   not null,
+    middle_name      varchar
+);

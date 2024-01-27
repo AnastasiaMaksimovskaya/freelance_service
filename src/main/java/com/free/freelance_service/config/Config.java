@@ -3,14 +3,18 @@ package com.free.freelance_service.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.ByteArrayHttpMessageConverter;
+import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.client.RestTemplate;
 
 import javax.sql.DataSource;
 import java.io.IOException;
+import java.util.List;
 import java.util.Properties;
 
 @Configuration
@@ -103,5 +107,15 @@ public class Config {
         HibernateTransactionManager manager = new HibernateTransactionManager();
         manager.setSessionFactory(sessionFactoryBean().getObject());
         return manager;
+    }
+
+    @Bean
+    public RestTemplate restTemplate(List<HttpMessageConverter<?>> messageConverters) {
+        return new RestTemplate(messageConverters);
+    }
+
+    @Bean
+    public ByteArrayHttpMessageConverter byteArrayHttpMessageConverter() {
+        return new ByteArrayHttpMessageConverter();
     }
 }

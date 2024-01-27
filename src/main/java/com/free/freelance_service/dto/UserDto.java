@@ -3,12 +3,12 @@ package com.free.freelance_service.dto;
 import com.free.freelance_service.enums.RoleEnum;
 
 public class UserDto {
+    private String userId;
     private String login;
     private String password;
     private String firstName;
     private String middleName;
     private String lastName;
-    private String fullName;
     private String phoneNumber;
 
     private RoleEnum role;
@@ -53,14 +53,6 @@ public class UserDto {
         this.lastName = lastName;
     }
 
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -75,5 +67,13 @@ public class UserDto {
 
     public void setRole(RoleEnum role) {
         this.role = role;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }
